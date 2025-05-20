@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>숫자야구</title>
+</head>
+<body>
+	<form id="form">
+		<input type="text" id="input" placeholder="예: 1,2,3,4">
+		<button id ="btn1">확인</button>
+	</form>
+	<div id="logs"></div>
+	<script>
+		const $input = document.getElementById('input');
+		const $form = document.querySelector('#form');
+		const $logs = document.querySelector('#logs');
+
+		const com_Rand_Card = [];
+		const tried = [];
+		let user_Card;
+		let tries = 0;
+
+		// 입력 값이 형식과 다를때 발생하는 이벤트
+	
+		/* document.getElementById("btn1").addEventListener('click',user_Input);
+
+		function user_Input(event){
+
+			event.preventDefault();
+			
+			let user = $input.value;
+
+			if(!(user.length == 7)){
+				return alert('4자리 숫자를 입력하세요. 형식에 맞지 않습니다.');
+			}
+			
+		 	user_Card = user.split(',').map(Number); // [1, 2, 3, 4]
+
+			console.log(user_Card);
+
+			for (let i = 0; i < user_Card.length; i++) {
+					for (let j = i+1; j < user_Card.length; j++) {
+							if(user_Card[i] == user_Card[j] ){
+								return alert('중복된 숫자를 입력했습니다.');
+							} 
+						
+					}
+				
+			}
+
+			const userStr = user_Card.join('');
+			if(tried.includes(userStr)){
+				return alert('이미 시도한 값입니다.');
+			}
+			tried.push(userStr);
+			
+		}
+
+		*/
+		// 입력값과 정답 비교하기
+		$form.addEventListener('submit', (event) => {
+
+			event.preventDefault();
+			
+			let user = $input.value;
+
+			if(!(user.length == 7)){
+				return alert('4자리 숫자를 입력하세요. 형식에 맞지 않습니다.');
+			}
+			
+		 	user_Card = user.split(',').map(Number); // [1, 2, 3, 4]
+
+			console.log(user_Card);
+
+			for (let i = 0; i < user_Card.length; i++) {
+					for (let j = i+1; j < user_Card.length; j++) {
+							if(user_Card[i] == user_Card[j] ){
+								return alert('중복된 숫자를 입력했습니다.');
+							} 
+						
+					}
+				
+			}
+
+			const userStr = user_Card.join('');
+			if(tried.includes(userStr)){
+				return alert('이미 시도한 값입니다.');
+			}
+			tried.push(userStr);
+			
+
+			if(tries >= 0 && tries < 10){
+
+				let strike = 0;
+				let ball = 0;
+
+				for (let i = 0; i < com_Rand_Card.length; i++) {
+					for (let j = i+1; j < user_Card.length; j++) {
+
+						if(com_Rand_Card[i] == user_Card[j]){
+							ball +=1;
+						}
+						
+					}
+
+					if(com_Rand_Card[i] == user_Card[i]){
+						strike +=1;
+					}
+					
+				}
+
+				console.log(strike, ball);
+
+				const log = document.createElement('div');
+				log.textContent = `${user_Card.join(',')}: ${strike} 스트라이크 ${ball} 볼`;
+				$logs.appendChild(log);
+
+				// 홈런 여부 검사
+				
+				if(user_Card.join('') === com_Rand_Card.join('')){
+					
+					const winMessage = document.createTextNode('홈런! 승리! 게임을 종료합니다.');
+					$logs.appendChild(winMessage);
+					return;
+
+				}
+
+				tries += 1; // 1번 시도할때 마다 횟수 더하기
+
+			}else{
+				const message = document.createTextNode(`패배! 정답은 ${com_Rand_Card.join('')}`);
+				$logs.appendChild(message);
+
+				//location.reload(true);
+
+				//return;
+			}
+
+		});
+
+		//숫자 4개를 컴퓨터가 랜덤으로 뽑는 이벤트
+		function Rand(){
+			while (com_Rand_Card.length < 4){
+				let randNum = Math.floor(Math.random() * 9) + 1;
+				if(!com_Rand_Card.includes(randNum)){
+					com_Rand_Card.push(randNum);
+				}
+			}
+
+			return com_Rand_Card;
+		}
+		
+		Rand();
+	</script>
+</body>
+</html>
